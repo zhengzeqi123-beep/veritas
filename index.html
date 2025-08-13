@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>VERITAS • 真相探索者</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-black: #0a0a0a;
+      --accent-gold: #D4AF37;
+      --soft-white: #fefefe;
+      --warm-grey: #f5f5f3;
+      --charcoal: #2a2a2a;
+      --crimson: #dc143c;
+      --forest: #1a4a3a;
+      --navy: #1a1a2e;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    /* 顶级字体层次 */
+    .serif-display {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    
+    .mono-accent {
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    
+    .body-elegant {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+    
+    /* 手机容器 - 真实手机比例 */
+    .phone-container {
+      width: 375px;
+      height: calc(100vh - 40px);
+      max-height: 812px;
+      background: var(--primary-black);
+      border-radius: 32px;
+      box-shadow: 
+        0 0 0 8px rgba(0, 0, 0, 0.8),
+        0 0 0 12px rgba(255, 255, 255, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 主容器 - 杂志级布局 */
+    .app-container {
+      background: linear-gradient(
+        135deg,
+        var(--primary-black) 0%,
+        var(--charcoal) 50%,
+        var(--navy) 100%
+      );
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+    }
+    
+    .app-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(220, 20, 60, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(26, 74, 58, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    /* 网格系统 */
+    .magazine-grid {
+      display: grid;
+      grid-template-columns: 16px 1fr 16px;
+      grid-template-rows: auto 1fr auto;
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+    
+    /* 标题区域 - 非对称设计 */
+    .header-zone {
+      grid-column: 1 / -1;
+      padding: 32px 0 24px;
+      position: relative;
+    }
+    
+    .title-lockup {
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .main-title {
+      font-size: clamp(28px, 8vw, 36px);
+      color: var(--soft-white);
+      margin-bottom: 4px;
+      position: relative;
+    }
+    
+    .main-title::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: var(--accent-gold);
+    }
+    
+    .subtitle {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+    
+    /* 卡片区域 - 现代杂志风格 */
+    .content-zone {
+      grid-column: 2;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 0;
+    }
+    
+    .card-stage {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 420px;
+      perspective: 1000px;
+    }
+    
+    .fact-card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      overflow: hidden;
+    }
+    
+    .card-bg-1 {
+      background: linear-gradient(
+        135deg,
+        rgba(212, 175, 55, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(212, 175, 55, 0.1) 100%
+      );
+    }
+    
+    .card-bg-2 {
+      background: linear-gradient(
+        135deg,
+        rgba(220, 20, 60, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(220, 20, 60, 0.1) 100%
+      );
+    }
+    
+    .card-bg-3 {
+      background: linear-gradient(
+        135deg,
+        rgba(26, 74, 58, 0.15) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(26, 74, 58, 0.1) 100%
+      );
+    }
+    
+    .card-content {
+      padding: 32px 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    
+    .card-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 60px;
+      background: var(--accent-gold);
+      border-radius: 2px;
+    }
+    
+    .card-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      align-self: flex-end;
+    }
+    
+    .card-icon i {
+      font-size: 24px;
+      color: var(--soft-white);
+    }
+    
+    .card-statement {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--soft-white);
+      line-height: 1.4;
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+    
+    .judgment-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .judge-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--soft-white);
+      font-size: 18px;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .judge-btn:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+    
+    .judge-btn.correct {
+      border-color: rgba(34, 197, 94, 0.6);
+      background: rgba(34, 197, 94, 0.1);
+    }
+    
+    .judge-btn.incorrect {
+      border-color: rgba(239, 68, 68, 0.6);
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    .judge-btn.partial {
+      border-color: rgba(245, 158, 11, 0.6);
+      background: rgba(245, 158, 11, 0.1);
+    }
+    
+    .card-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--soft-white);
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .nav-arrow:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+    }
+    
+    .card-counter {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+    
+    /* 底部导航 - 极简设计 */
+    .bottom-zone {
+      grid-column: 1 / -1;
+      padding: 0 16px 24px;
+    }
+    
+    .navigation-dock {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-item.active {
+      background: rgba(212, 175, 55, 0.2);
+    }
+    
+    .nav-item i {
+      font-size: 18px;
+      color: var(--soft-white);
+    }
+    
+    .nav-item span {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+    
+    /* 模态框 - 杂志级排版 */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    
+    .modal-content {
+      background: var(--soft-white);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 320px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .modal-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--accent-gold);
+      border-radius: 20px 20px 0 0;
+    }
+    
+    .result-icon {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .result-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-black);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    .result-explanation {
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    
+    .result-explanation .verdict {
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 8px;
+    }
+    
+    .verdict.correct {
+      background: rgba(34, 197, 94, 0.1);
+      color: rgb(34, 197, 94);
+    }
+    
+    .verdict.incorrect {
+      background: rgba(239, 68, 68, 0.1);
+      color: rgb(239, 68, 68);
+    }
+    
+    .verdict.partial {
+      background: rgba(245, 158, 11, 0.1);
+      color: rgb(245, 158, 11);
+    }
+    
+    .source-section {
+      margin-bottom: 24px;
+    }
+    
+    .source-toggle {
+      cursor: pointer;
+      color: var(--charcoal);
+      font-weight: 500;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .source-content {
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.6);
+      margin-top: 12px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent-gold);
+    }
+    
+    .related-articles {
+      margin-bottom: 24px;
+    }
+    
+    .related-articles a {
+      display: block;
+      color: var(--charcoal);
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      transition: color 0.3s ease;
+    }
+    
+    .related-articles a:hover {
+      color: var(--accent-gold);
+    }
+    
+    .close-button {
+      width: 100%;
+      background: var(--primary-black);
+      color: var(--soft-white);
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .close-button:hover {
+      background: var(--charcoal);
+      transform: translateY(-1px);
+    }
+    
+    /* 动画 */
+    .card-animate {
+      animation: subtleFloat 6s ease-in-out infinite;
+    }
+    
+    @keyframes subtleFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 响应式调整 */
+    @media (max-height: 700px) {
+      .phone-container {
+        max-height: 600px;
+      }
+      .card-stage {
+        height: 300px;
+      }
+      .card-content {
+        padding: 20px 16px;
+      }
+      .header-zone {
+        padding: 24px 0 16px;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      body {
+        padding: 10px;
+      }
+      .phone-container {
+        width: calc(100vw - 20px);
+        max-width: 375px;
+      }
+    }
+    
+    /* 页面内容 */
+    .page-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* 核查页面样式 */
+    .fact-check-container {
+      padding: 40px 24px;
+      width: 100%;
+      max-width: 100%;
+      text-align: center;
+    }
+    
+    .check-header {
+      margin-bottom: 40px;
+    }
+    
+
+    
+    .check-title {
+      font-size: 28px;
+      color: var(--soft-white);
+      margin-bottom: 8px;
+    }
+    
+    .check-subtitle {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    /* 现代搜索框样式 */
+    .search-container {
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    
+    .search-box {
+      background: var(--soft-white);
+      border-radius: 24px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        0 1px 3px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .file-upload-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--warm-grey);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .file-upload-btn:hover {
+      background: rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+    }
+    
+    .file-upload-btn i {
+      font-size: 16px;
+      color: var(--charcoal);
+    }
+    
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 16px;
+      font-size: 16px;
+      color: var(--charcoal);
+      background: transparent;
+      font-weight: 400;
+    }
+    
+    .search-input::placeholder {
+      color: rgba(0, 0, 0, 0.4);
+      font-weight: 400;
+    }
+    
+    .search-submit-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-black);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .search-submit-btn:hover {
+      background: var(--charcoal);
+      transform: scale(1.05);
+    }
+    
+    .search-submit-btn i {
+      font-size: 16px;
+      color: var(--soft-white);
+    }
+    
+    /* 隐藏类 */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-container">
+    <div class="app-container magazine-grid">
+    <!-- Header Zone -->
+    <header class="header-zone">
+      <div class="title-lockup">
+        <h1 class="main-title serif-display">VERITAS</h1>
+        <p class="subtitle mono-accent">Truth Explorer</p>
+      </div>
+    </header>
+    
+    <!-- Content Zone -->
+    <main class="content-zone">
+      <!-- 探索页面 -->
+      <div id="explore-page" class="page-content">
+        <div id="card-stage" class="card-stage card-animate">
+          <!-- Cards will be injected here -->
+        </div>
+      </div>
+      
+      <!-- 核查页面 -->
+      <div id="check-page" class="page-content hidden">
+        <div class="fact-check-container">
+          <div class="check-header">
+            <h2 class="check-title serif-display">AI 事实核查</h2>
+            <p class="check-subtitle mono-accent">输入任何观点，获得专业分析</p>
+          </div>
+    
+          <div class="input-section">
+            <div class="search-container">
+              <div class="search-box">
+                <button class="file-upload-btn" onclick="triggerFileUpload()" title="上传文件">
+                  <i class="fas fa-paperclip"></i>
+                </button>
+                <input 
+                  type="text"
+                  id="fact-input" 
+                  class="search-input body-elegant" 
+                  placeholder="输入你要验证的观点"
+                />
+                <button class="search-submit-btn" onclick="submitFactCheck()" title="发送">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+              <!-- 隐藏的文件上传输入 -->
+              <input 
+                type="file" 
+                id="file-upload" 
+                class="hidden" 
+                accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png"
+                onchange="handleFileUpload(event)"
+              />
+            </div>
+          </div>
+          
+          <div id="check-result" class="check-result hidden">
+            <!-- 核查结果将显示在这里 -->
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Bottom Zone -->
+    <footer class="bottom-zone">
+      <nav class="navigation-dock">
+        <div class="nav-item active" onclick="switchToExplorePage()">
+          <i class="fas fa-compass"></i>
+          <span>探索</span>
+        </div>
+        <div class="nav-item" onclick="switchToCheckPage()">
+          <i class="fas fa-magnifying-glass-chart"></i>
+          <span>核查</span>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-bookmark"></i>
+          <span>收藏</span>
+        </div>
+      </nav>
+    </footer>
+    </div>
+  </div>
+  
+  <!-- Result Modal -->
+  <div id="result-modal" class="modal-backdrop hidden">
+    <div class="modal-content fade-in">
+      <div id="result-icon" class="result-icon"></div>
+      <h2 id="result-title" class="result-title serif-display"></h2>
+      <div id="result-explanation" class="result-explanation body-elegant"></div>
+      
+      <details class="source-section">
+        <summary class="source-toggle mono-accent">📚 数据来源</summary>
+        <div id="result-source" class="source-content"></div>
+      </details>
+      
+      <div id="result-articles" class="related-articles"></div>
+      
+      <button onclick="closeModal()" class="close-button mono-accent">
+        继续探索
+      </button>
+    </div>
+  </div>
+  
+  <script>
+    // 精选事实数据
+    const factCards = [
+      {
+        title: "食用蛋黄会显著提高血液胆固醇水平",
+        icon: "fa-egg",
+        answer: "错误",
+        explain: "现代营养科学研究表明，膳食胆固醇对血液胆固醇的影响远小于饱和脂肪。蛋黄中的卵磷脂实际上有助于胆固醇代谢平衡。",
+        source: "美国心脏协会2019年膳食指南 • 《新英格兰医学杂志》营养代谢研究",
+        articles: [
+          {title: "🥚 重新认识蛋黄：营养科学的新发现", url: "#"},
+          {title: "💡 胆固醇代谢的复杂真相", url: "#"}
+        ]
+      },
+      {
+        title: "iPhone在2023年成为全球销量冠军",
+        icon: "fa-mobile-screen-button",
+        answer: "正确",
+        explain: "根据多家权威市场研究机构数据，苹果iPhone在2023年首次超越三星，以20.1%的市场份额成为全球智能手机销量第一。",
+        source: "IDC全球手机市场报告2023 • Canalys智能手机市场分析",
+        articles: [
+          {title: "📱 2023手机市场格局分析", url: "#"},
+          {title: "📊 苹果崛起背后的战略洞察", url: "#"}
+        ]
+      },
+      {
+        title: "每日8杯水是所有人的标准饮水量",
+        icon: "fa-glass-water",
+        answer: "部分正确",
+        explain: "8杯水只是一个通用参考值。实际需水量因人而异，取决于体重、活动强度、气候环境等多重因素。科学建议是每公斤体重需要30-35毫升水。",
+        source: "世界卫生组织《饮用水安全指南》• 美国医学研究院水分摄入建议",
+        articles: [
+          {title: "💧 个性化饮水：科学补水指南", url: "#"},
+          {title: "⚡ 脱水信号：身体的预警系统", url: "#"}
+        ]
+      },
+      {
+        title: "蓝光对眼睛有害且会造成永久损伤",
+        icon: "fa-eye",
+        answer: "部分正确",
+        explain: "过度蓝光暴露确实可能影响睡眠节律，但目前缺乏充分证据证明日常设备的蓝光会造成视网膜永久损伤。适度使用防蓝光措施仍有益处。",
+        source: "美国眼科学会官方声明 • 《自然》杂志视觉科学研究",
+        articles: [
+          {title: "👁️ 蓝光真相：分离事实与恐慌", url: "#"},
+          {title: "🌙 数字时代的护眼策略", url: "#"}
+        ]
+      },
+      {
+        title: "维生素C能够预防感冒",
+        icon: "fa-pills",
+        answer: "部分正确",
+        explain: "大量研究显示，维生素C对预防普通感冒的效果有限，但可能缩短感冒持续时间约8%。对于极限运动员等特殊人群预防效果更明显。",
+        source: "科克伦系统评价数据库 • 《英国医学杂志》维生素C研究汇总",
+        articles: [
+          {title: "🍊 维生素C神话的科学解读", url: "#"},
+          {title: "🛡️ 免疫系统的真正守护者", url: "#"}
+        ]
+      }
+    ];
+
+    let currentCardIndex = 0;
+
+    function getCardBackground(index) {
+      const backgrounds = ['card-bg-1', 'card-bg-2', 'card-bg-3'];
+      return backgrounds[index % backgrounds.length];
+    }
+
+    function renderCards() {
+      const stage = document.getElementById('card-stage');
+      stage.innerHTML = '';
+      
+      // 渲染当前卡片和背景卡片
+      for (let i = 2; i >= 0; i--) {
+        const cardIndex = currentCardIndex + i;
+        if (cardIndex < factCards.length) {
+          const card = factCards[cardIndex];
+          const bgClass = getCardBackground(cardIndex);
+          
+          const offsetX = i * 6;
+          const offsetY = i * 12;
+          const scale = 1 - (i * 0.04);
+          const opacity = i === 0 ? 1 : 0.7;
+          const zIndex = 10 - i;
+          const rotation = i * 8;
+          
+          stage.innerHTML += `
+            <div class="fact-card ${bgClass}" 
+                 style="z-index: ${zIndex}; 
+                        transform: translate(${offsetX}px, ${offsetY}px) 
+                                  scale(${scale}) 
+                                  rotate(${rotation}deg); 
+                        opacity: ${opacity};">
+              <div class="card-content">
+                <div class="card-icon">
+                  <i class="fas ${card.icon}"></i>
+                </div>
+                
+                <div class="card-statement body-elegant">
+                  ${card.title}
+                </div>
+                
+                ${i === 0 ? `
+                <div class="judgment-controls">
+                  <button onclick="makeJudgment('正确')" class="judge-btn correct">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button onclick="makeJudgment('错误')" class="judge-btn incorrect">
+                    <i class="fas fa-times"></i>
+                  </button>
+                  <button onclick="makeJudgment('部分正确')" class="judge-btn partial">
+                    <i class="fas fa-exclamation"></i>
+                  </button>
+                </div>
+                
+                <div class="card-navigation">
+                  <button onclick="previousCard()" class="nav-arrow">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                  <div class="card-counter mono-accent">
+                    ${currentCardIndex + 1} / ${factCards.length}
+                  </div>
+                  <button onclick="nextCard()" class="nav-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    function makeJudgment(choice) {
+      const card = factCards[currentCardIndex];
+      const modal = document.getElementById('result-modal');
+      modal.classList.remove('hidden');
+      
+      let icon, verdictClass, title;
+      
+      if (choice === card.answer) {
+        icon = '<i class="fas fa-check-circle" style="color: #22c55e;"></i>';
+        title = '🎯 判断正确！';
+        verdictClass = 'correct';
+      } else {
+        icon = '<i class="fas fa-times-circle" style="color: #ef4444;"></i>';
+        title = '🔍 再次探索';
+        verdictClass = choice === '部分正确' ? 'partial' : 'incorrect';
+      }
+      
+      document.getElementById('result-icon').innerHTML = icon;
+      document.getElementById('result-title').textContent = title;
+      document.getElementById('result-explanation').innerHTML = 
+        `<span class="verdict ${card.answer === '正确' ? 'correct' : card.answer === '错误' ? 'incorrect' : 'partial'}">
+          【${card.answer}】
+        </span>${card.explain}`;
+      document.getElementById('result-source').textContent = card.source;
+      document.getElementById('result-articles').innerHTML = 
+        card.articles.map(article => 
+          `<a href="${article.url}" target="_blank">${article.title}</a>`
+        ).join('');
+    }
+
+    function closeModal() {
+      document.getElementById('result-modal').classList.add('hidden');
+      nextCard();
+    }
+
+    function nextCard() {
+      if (currentCardIndex < factCards.length - 1) {
+        currentCardIndex++;
+        renderCards();
+      }
+    }
+
+    function previousCard() {
+      if (currentCardIndex > 0) {
+        currentCardIndex--;
+        renderCards();
+      }
+    }
+
+    // 触摸滑动支持
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.getElementById('card-stage').addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+
+    document.getElementById('card-stage').addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+      
+      // 确保是水平滑动而非垂直滑动
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        if (deltaX > 0) {
+          previousCard();
+        } else {
+          nextCard();
+        }
+      }
+    });
+
+    // 页面切换功能
+    function switchToExplorePage() {
+      document.getElementById('explore-page').classList.remove('hidden');
+      document.getElementById('check-page').classList.add('hidden');
+      
+      // 更新导航状态
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector('[onclick="switchToExplorePage()"]').classList.add('active');
+    }
+    
+    function switchToCheckPage() {
+      document.getElementById('explore-page').classList.add('hidden');
+      document.getElementById('check-page').classList.remove('hidden');
+      
+      // 更新导航状态
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector('[onclick="switchToCheckPage()"]').classList.add('active');
+    }
+
+    // 初始化
+    renderCards();
+  </script>
+</body>
+</html>
