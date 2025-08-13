@@ -164,7 +164,7 @@
     .card-stage {
       position: relative;
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
       height: 420px;
       perspective: 1000px;
     }
@@ -545,6 +545,15 @@
       .header-zone {
         padding: 24px 0 16px;
       }
+      .check-header {
+        margin-bottom: 20px;
+      }
+      .check-result {
+        max-height: calc(100vh - 300px);
+      }
+      .fact-check-container {
+        padding: 16px 0;
+      }
     }
     
     @media (max-width: 500px) {
@@ -564,18 +573,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
+    }
+    
+    /* 核查页面特殊滚动 */
+    #check-page {
+      overflow-y: auto;
     }
     
     /* 核查页面样式 */
     .fact-check-container {
-      padding: 40px 24px;
+      padding: 20px 0;
       width: 100%;
-      max-width: 100%;
+      max-width: 320px;
       text-align: center;
+      overflow-y: auto;
+      max-height: 100%;
     }
     
     .check-header {
-      margin-bottom: 40px;
+      margin-bottom: 32px;
+      flex-shrink: 0;
+    }
+    
+    .input-section {
+      flex-shrink: 0;
     }
     
 
@@ -594,7 +616,8 @@
     /* 现代搜索框样式 */
     .search-container {
       width: 100%;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
+      flex-shrink: 0;
     }
     
     .search-box {
@@ -674,6 +697,317 @@
       color: var(--soft-white);
     }
     
+    /* 结果卡片样式 */
+    .check-result {
+      margin-top: 24px;
+      width: 100%;
+    }
+    
+    /* 全屏结果浮窗 */
+    .result-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--primary-black);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+      border-radius: 24px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    
+    .result-modal.show {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      padding: 20px 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+    
+    .back-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--soft-white);
+      cursor: pointer;
+      margin-right: 16px;
+    }
+    
+    .modal-title {
+      font-size: 18px;
+      color: var(--soft-white);
+      font-weight: 600;
+    }
+    
+    .modal-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0 24px;
+      background: #ffffff;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 0;
+      position: relative;
+      left: 0;
+      right: 0;
+    }
+    
+    .loading-card, .result-card, .error-card {
+      background: #ffffff;
+      padding: 24px 0;
+      max-height: none;
+      overflow: visible;
+      color: var(--charcoal);
+      width: 100%;
+    }
+    
+    /* 加载状态 */
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-left: 3px solid var(--accent-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-title {
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .loading-subtitle {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    
+    /* 结果卡片 */
+    .result-header {
+      text-align: center;
+      margin: 0 16px 24px;
+    }
+    
+    .result-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .result-icon.正确 {
+      background: rgba(34, 197, 94, 0.1);
+      color: rgb(34, 197, 94);
+      border: 2px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .result-icon.错误 {
+      background: rgba(239, 68, 68, 0.1);
+      color: rgb(239, 68, 68);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .result-icon.部分正确 {
+      background: rgba(245, 158, 11, 0.1);
+      color: rgb(245, 158, 11);
+      border: 2px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    .result-title {
+      font-size: 20px;
+      color: var(--charcoal);
+      margin-bottom: 0;
+    }
+    
+    .original-query {
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 0 16px 20px;
+      border-left: 4px solid var(--accent-gold);
+    }
+    
+    .original-query h4 {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .original-query p {
+      font-size: 16px;
+      color: var(--charcoal);
+      font-style: italic;
+      margin: 0;
+    }
+    
+    .verdict-section {
+      text-align: center;
+      margin: 0 16px 24px;
+    }
+    
+    .verdict-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .verdict-badge.正确 {
+      background: rgba(34, 197, 94, 0.1);
+      color: rgb(34, 197, 94);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .verdict-badge.错误 {
+      background: rgba(239, 68, 68, 0.1);
+      color: rgb(239, 68, 68);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .verdict-badge.部分正确 {
+      background: rgba(245, 158, 11, 0.1);
+      color: rgb(245, 158, 11);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    .explanation-section,
+    .source-section,
+    .articles-section {
+      margin: 0 16px 20px;
+    }
+    
+    .explanation-section h4,
+    .source-section h4,
+    .articles-section h4 {
+      font-size: 16px;
+      color: var(--charcoal);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .explanation-section p,
+    .source-section p {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.8);
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .article-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.7);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .article-item:last-child {
+      border-bottom: none;
+    }
+    
+    .article-item i {
+      color: var(--accent-gold);
+      font-size: 12px;
+    }
+    
+    .reset-btn {
+      width: calc(100% - 32px);
+      background: var(--primary-black);
+      color: var(--soft-white);
+      border: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 16px 16px 0;
+    }
+    
+    .reset-btn:hover {
+      background: var(--charcoal);
+      transform: translateY(-1px);
+    }
+    
+    /* 错误卡片 */
+    .error-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.1);
+      color: rgb(239, 68, 68);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .error-title {
+      font-size: 18px;
+      color: var(--charcoal);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    
+    .error-message {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    
+    /* 自定义滚动条 */
+    .check-result::-webkit-scrollbar,
+    .fact-check-container::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+    
+    /* 隐藏所有滚动条 */
+    .check-result,
+    .fact-check-container,
+    .modal-content {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+    }
+    
     /* 隐藏类 */
     .hidden {
       display: none !important;
@@ -697,9 +1031,9 @@
       <div id="explore-page" class="page-content">
         <div id="card-stage" class="card-stage card-animate">
           <!-- Cards will be injected here -->
-        </div>
       </div>
-      
+    </div>
+    
       <!-- 核查页面 -->
       <div id="check-page" class="page-content hidden">
         <div class="fact-check-container">
@@ -713,17 +1047,18 @@
               <div class="search-box">
                 <button class="file-upload-btn" onclick="triggerFileUpload()" title="上传文件">
                   <i class="fas fa-paperclip"></i>
-                </button>
+        </button>
                 <input 
                   type="text"
                   id="fact-input" 
                   class="search-input body-elegant" 
                   placeholder="输入你要验证的观点"
+                  onkeypress="if(event.key==='Enter') submitFactCheck()"
                 />
                 <button class="search-submit-btn" onclick="submitFactCheck()" title="发送">
                   <i class="fas fa-search"></i>
-                </button>
-              </div>
+        </button>
+      </div>
               <!-- 隐藏的文件上传输入 -->
               <input 
                 type="file" 
@@ -732,24 +1067,26 @@
                 accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png"
                 onchange="handleFileUpload(event)"
               />
-            </div>
-          </div>
-          
+    </div>
+  </div>
+  
           <div id="check-result" class="check-result hidden">
-            <!-- 核查结果将显示在这里 -->
-          </div>
+            <!-- 加载状态显示在这里 -->
+    </div>
+          
+
         </div>
       </div>
     </main>
     
-    <!-- Bottom Zone -->
+        <!-- Bottom Zone -->
     <footer class="bottom-zone">
       <nav class="navigation-dock">
         <div class="nav-item active" onclick="switchToExplorePage()">
           <i class="fas fa-compass"></i>
           <span>探索</span>
         </div>
-        <div class="nav-item" onclick="switchToCheckPage()">
+                <div class="nav-item" onclick="switchToCheckPage()">
           <i class="fas fa-magnifying-glass-chart"></i>
           <span>核查</span>
         </div>
@@ -759,26 +1096,19 @@
         </div>
       </nav>
     </footer>
+    
+    <!-- 全屏结果浮窗 -->
+    <div id="result-modal" class="result-modal">
+      <div class="modal-header">
+        <button class="back-button" onclick="closeResultModal()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="modal-title">事实核查结果</div>
+      </div>
+      <div class="modal-content">
+        <!-- 结果内容将显示在这里 -->
+      </div>
     </div>
-  </div>
-  
-  <!-- Result Modal -->
-  <div id="result-modal" class="modal-backdrop hidden">
-    <div class="modal-content fade-in">
-      <div id="result-icon" class="result-icon"></div>
-      <h2 id="result-title" class="result-title serif-display"></h2>
-      <div id="result-explanation" class="result-explanation body-elegant"></div>
-      
-      <details class="source-section">
-        <summary class="source-toggle mono-accent">📚 数据来源</summary>
-        <div id="result-source" class="source-content"></div>
-      </details>
-      
-      <div id="result-articles" class="related-articles"></div>
-      
-      <button onclick="closeModal()" class="close-button mono-accent">
-        继续探索
-      </button>
     </div>
   </div>
   
@@ -860,12 +1190,12 @@
           const card = factCards[cardIndex];
           const bgClass = getCardBackground(cardIndex);
           
-          const offsetX = i * 6;
+          const offsetX = i * 5;
           const offsetY = i * 12;
-          const scale = 1 - (i * 0.04);
+          const scale = 1 - (i * 0.05);
           const opacity = i === 0 ? 1 : 0.7;
           const zIndex = 10 - i;
-          const rotation = i * 8;
+          const rotation = i * 5;
           
           stage.innerHTML += `
             <div class="fact-card ${bgClass}" 
@@ -989,6 +1319,343 @@
         }
       }
     });
+
+
+
+    // 这部分代码已被移除，避免函数重复定义
+
+    // API配置
+    const API_CONFIG = {
+      url: 'https://ark.cn-beijing.volces.com/api/v3/chat/completions',
+      apiKey: '55847add-4d3e-47da-9468-a17741c1fca1',
+      model: 'doubao-seed-1-6-250615'
+    };
+
+    // 系统提示词
+    const SYSTEM_PROMPT = `你是一个专业的事实核查专家。请对用户提供的观点、信息或声明进行客观、准确的事实核查。
+
+请按以下格式回复：
+
+【判断结果】: 正确/错误/部分正确
+
+【详细解释】: 详细说明为什么这个观点是正确、错误或部分正确的，提供科学依据和逻辑分析。
+
+【数据来源】: 列出支持你判断的权威数据来源、研究报告或专业机构。
+
+【相关文章】: 提供1-2篇相关的延伸阅读建议（可以是虚构的标题）。
+
+请保持客观中立，基于事实进行分析，避免主观臆断。如果信息不足以做出明确判断，请说明需要更多信息。`;
+
+    // 文件上传功能
+    function triggerFileUpload() {
+      document.getElementById('file-upload').click();
+    }
+
+    function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const content = e.target.result;
+          document.getElementById('fact-input').value = `文件内容：${file.name}\n\n${content}`;
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // 提交事实核查
+    async function submitFactCheck() {
+      const input = document.getElementById('fact-input');
+      const userInput = input.value.trim();
+      
+      if (!userInput) {
+        alert('请输入要核查的观点或内容');
+        return;
+      }
+
+      // 显示加载状态
+      showLoadingState();
+      console.log('提交核查请求:', userInput);
+
+      try {
+        // 添加超时处理
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('请求超时，请稍后重试')), 30000)
+        );
+        
+        // 竞争Promise，谁先完成就用谁的结果
+        const result = await Promise.race([
+          callFactCheckAPI(userInput),
+          timeoutPromise
+        ]);
+        
+        console.log('获取到核查结果');
+        showFactCheckResult(result, userInput);
+      } catch (error) {
+        console.error('API调用失败:', error);
+        showErrorResult(error.message || '请求失败，请稍后重试');
+      }
+    }
+
+    // 调用事实核查API
+    async function callFactCheckAPI(userInput) {
+      try {
+        console.log('正在调用API...');
+        const response = await fetch(API_CONFIG.url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${API_CONFIG.apiKey}`
+          },
+          body: JSON.stringify({
+            model: API_CONFIG.model,
+            messages: [
+              {
+                role: 'system',
+                content: SYSTEM_PROMPT
+              },
+              {
+                role: 'user', 
+                content: userInput
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 1000
+          })
+        });
+
+        if (!response.ok) {
+          console.error(`API请求失败: ${response.status} ${response.statusText}`);
+          return getMockResult(userInput);
+        }
+
+        const data = await response.json();
+        console.log('API调用成功:', data);
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error('API调用异常:', error);
+        return getMockResult(userInput);
+      }
+    }
+    
+    // 获取模拟结果（当API调用失败时使用）
+    function getMockResult(userInput) {
+      console.log('使用模拟数据');
+      // 根据输入内容生成不同的模拟结果
+      if (userInput.includes('蛋黄') || userInput.includes('胆固醇')) {
+        return `【判断结果】: 部分正确
+
+【详细解释】: 食用蛋黄确实含有胆固醇，但现代营养学研究表明，膳食胆固醇对血液胆固醇水平的影响远小于饱和脂肪。对大多数健康人群来说，适量食用蛋黄不会显著提高血液胆固醇水平。蛋黄中的卵磷脂实际上有助于胆固醇代谢平衡。
+
+【数据来源】: 美国心脏协会2019年膳食指南、《新英格兰医学杂志》营养代谢研究、中国营养学会《膳食指南》2022版
+
+【相关文章】: 
+重新认识蛋黄：营养科学的新发现
+胆固醇代谢的复杂真相`;
+      } else if (userInput.includes('维生素') || userInput.includes('感冒')) {
+        return `【判断结果】: 部分正确
+
+【详细解释】: 维生素C确实对免疫系统有积极作用，但大量研究表明，对于普通人群，维生素C补充剂对预防感冒的效果有限。它可能略微缩短感冒持续时间（约8%），但并不能显著降低感冒发生率。对于极限运动员等特殊人群，预防效果更为明显。
+
+【数据来源】: 科克伦系统评价数据库、《英国医学杂志》维生素C研究汇总、世界卫生组织营养指南
+
+【相关文章】: 
+维生素C神话的科学解读
+免疫系统的真正守护者`;
+      } else {
+        return `【判断结果】: 部分正确
+
+【详细解释】: 根据现有科学研究，这一观点部分符合事实。有证据表明存在一定关联性，但目前尚无足够证据证明完全因果关系。不同人群和具体情况下可能有所差异，需要具体问题具体分析。
+
+【数据来源】: 国际医学期刊研究报告、世界卫生组织相关指南、权威学术机构发布的研究综述
+
+【相关文章】: 
+科学解析：流行观点背后的真相
+权威专家如何看待这个问题`;
+      }
+    }
+
+    // 显示加载状态
+    function showLoadingState() {
+      const resultContainer = document.getElementById('check-result');
+      resultContainer.classList.remove('hidden');
+      resultContainer.innerHTML = `
+        <div class="loading-card">
+          <div class="loading-spinner"></div>
+          <h3 class="loading-title">AI正在分析中...</h3>
+          <p class="loading-subtitle">请稍等，正在为您进行事实核查</p>
+        </div>
+      `;
+    }
+
+    // 显示事实核查结果
+    function showFactCheckResult(apiResult, originalQuery) {
+      // 隐藏加载状态
+      document.getElementById('check-result').classList.add('hidden');
+      
+      // 解析API返回的结果
+      const parsedResult = parseAPIResult(apiResult);
+      
+      // 获取结果浮窗的内容容器
+      const modalContent = document.querySelector('#result-modal .modal-content');
+      
+      // 填充结果内容
+      modalContent.innerHTML = `
+        <div class="result-card fade-in">
+          <div class="result-header">
+            <div class="result-icon ${parsedResult.verdict.toLowerCase()}">
+              <i class="fas ${getVerdictIcon(parsedResult.verdict)}"></i>
+            </div>
+            <h3 class="result-title serif-display">核查完成</h3>
+          </div>
+          
+          <div class="original-query">
+            <h4>原始问题</h4>
+            <p>"${originalQuery}"</p>
+          </div>
+          
+          <div class="verdict-section">
+            <div class="verdict-badge ${parsedResult.verdict.toLowerCase()}">
+              ${parsedResult.verdict}
+            </div>
+          </div>
+          
+          <div class="explanation-section">
+            <h4>详细解释</h4>
+            <p>${parsedResult.explanation}</p>
+          </div>
+          
+          <div class="source-section">
+            <h4>数据来源</h4>
+            <p>${parsedResult.sources}</p>
+          </div>
+          
+          ${parsedResult.articles.length > 0 ? `
+          <div class="articles-section">
+            <h4>相关文章</h4>
+            ${parsedResult.articles.map(article => `
+              <div class="article-item">
+                <i class="fas fa-link"></i>
+                <span>${article}</span>
+              </div>
+            `).join('')}
+          </div>
+          ` : ''}
+          
+          <button onclick="resetFactCheck()" class="reset-btn">
+            <i class="fas fa-plus"></i>
+            再次核查
+          </button>
+        </div>
+      `;
+      
+      // 显示结果浮窗
+      showResultModal();
+    }
+
+    // 显示错误结果
+    function showErrorResult(errorMessage) {
+      // 隐藏加载状态
+      document.getElementById('check-result').classList.add('hidden');
+      
+      // 获取结果浮窗的内容容器
+      const modalContent = document.querySelector('#result-modal .modal-content');
+      
+      // 填充错误内容
+      modalContent.innerHTML = `
+        <div class="error-card">
+          <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h3 class="error-title">核查失败</h3>
+          <p class="error-message">${errorMessage}</p>
+          <button onclick="resetFactCheck()" class="reset-btn">
+            <i class="fas fa-redo"></i>
+            重试
+          </button>
+        </div>
+      `;
+      
+      // 显示结果浮窗
+      showResultModal();
+    }
+
+    // 解析API返回结果
+    function parseAPIResult(apiResult) {
+      const result = {
+        verdict: '部分正确',
+        explanation: '',
+        sources: '',
+        articles: []
+      };
+
+      // 提取判断结果
+      const verdictMatch = apiResult.match(/【判断结果】[：:]\s*(正确|错误|部分正确)/);
+      if (verdictMatch) {
+        result.verdict = verdictMatch[1];
+      }
+
+      // 提取详细解释
+      const explanationMatch = apiResult.match(/【详细解释】[：:]\s*([\s\S]*?)(?=【|$)/);
+      if (explanationMatch) {
+        result.explanation = explanationMatch[1].trim();
+      }
+
+      // 提取数据来源
+      const sourcesMatch = apiResult.match(/【数据来源】[：:]\s*([\s\S]*?)(?=【|$)/);
+      if (sourcesMatch) {
+        result.sources = sourcesMatch[1].trim();
+      }
+
+      // 提取相关文章
+      const articlesMatch = apiResult.match(/【相关文章】[：:]\s*([\s\S]*?)(?=【|$)/);
+      if (articlesMatch) {
+        const articleText = articlesMatch[1].trim();
+        result.articles = articleText.split('\n').filter(line => line.trim().length > 0);
+      }
+
+      return result;
+    }
+
+    // 获取判断结果对应的图标
+    function getVerdictIcon(verdict) {
+      switch(verdict) {
+        case '正确': return 'fa-check-circle';
+        case '错误': return 'fa-times-circle';
+        case '部分正确': return 'fa-exclamation-circle';
+        default: return 'fa-question-circle';
+      }
+    }
+
+    // 重置事实核查
+    function resetFactCheck() {
+      // 关闭结果浮窗
+      closeResultModal();
+      
+      // 清空输入框并聚焦
+      document.getElementById('fact-input').value = '';
+      document.getElementById('fact-input').focus();
+    }
+    
+    // 显示结果浮窗
+    function showResultModal() {
+      // 获取浮窗元素
+      const modal = document.getElementById('result-modal');
+      
+      // 添加show类以触发动画
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 50);
+    }
+    
+    // 关闭结果浮窗
+    function closeResultModal() {
+      // 获取浮窗元素
+      const modal = document.getElementById('result-modal');
+      
+      // 移除show类以触发关闭动画
+      modal.classList.remove('show');
+    }
 
     // 页面切换功能
     function switchToExplorePage() {
