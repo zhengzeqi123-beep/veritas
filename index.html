@@ -1103,7 +1103,7 @@
         <button class="back-button" onclick="closeResultModal()">
           <i class="fas fa-arrow-left"></i>
         </button>
-        <div class="modal-title">事实核查结果</div>
+                  <div class="modal-title">探索结果</div>
       </div>
       <div class="modal-content">
         <!-- 结果内容将显示在这里 -->
@@ -1247,9 +1247,11 @@
 
     function makeJudgment(choice) {
       const card = factCards[currentCardIndex];
-      const modal = document.getElementById('result-modal');
-      modal.classList.remove('hidden');
       
+      // 获取结果浮窗的内容容器
+      const modalContent = document.querySelector('#result-modal .modal-content');
+      
+      // 判断结果
       let icon, verdictClass, title;
       
       if (choice === card.answer) {
@@ -1262,17 +1264,64 @@
         verdictClass = choice === '部分正确' ? 'partial' : 'incorrect';
       }
       
-      document.getElementById('result-icon').innerHTML = icon;
-      document.getElementById('result-title').textContent = title;
-      document.getElementById('result-explanation').innerHTML = 
-        `<span class="verdict ${card.answer === '正确' ? 'correct' : card.answer === '错误' ? 'incorrect' : 'partial'}">
-          【${card.answer}】
-        </span>${card.explain}`;
-      document.getElementById('result-source').textContent = card.source;
-      document.getElementById('result-articles').innerHTML = 
-        card.articles.map(article => 
-          `<a href="${article.url}" target="_blank">${article.title}</a>`
-        ).join('');
+      // 填充结果内容
+      modalContent.innerHTML = `
+        <div class="result-card fade-in">
+          <div class="result-header">
+            <div class="result-icon ${verdictClass}">
+              ${icon}
+            </div>
+            <h3 class="result-title serif-display">${title}</h3>
+          </div>
+          
+          <div class="original-query">
+            <h4>原始问题</h4>
+            <p>"${card.title}"</p>
+          </div>
+          
+          <div class="verdict-section">
+            <div class="verdict-badge ${card.answer === '正确' ? 'correct' : card.answer === '错误' ? 'incorrect' : 'partial'}">
+              【${card.answer}】
+            </div>
+          </div>
+          
+          <div class="explanation-section">
+            <h4>详细解释</h4>
+            <p>${card.explain}</p>
+          </div>
+          
+          <div class="source-section">
+            <h4>数据来源</h4>
+            <p>${card.source}</p>
+          </div>
+          
+          ${card.articles.length > 0 ? `
+          <div class="articles-section">
+            <h4>相关文章</h4>
+            ${card.articles.map(article => `
+              <div class="article-item">
+                <i class="fas fa-link"></i>
+                <span>${article.title}</span>
+              </div>
+            `).join('')}
+          </div>
+          ` : ''}
+          
+          <button onclick="closeExploreModal()" class="reset-btn">
+            <i class="fas fa-arrow-right"></i>
+            下一题
+          </button>
+        </div>
+      `;
+      
+      // 显示结果浮窗
+      showResultModal();
+    }
+    
+    // 关闭探索页面结果浮窗
+    function closeExploreModal() {
+      closeResultModal();
+      nextCard();
     }
 
     function closeModal() {
